@@ -1,18 +1,32 @@
-name: Download Restricted File
+name: Download and Create Release
 
 on:
   workflow_dispatch:
 
 jobs:
-  download:
+  download-and-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Download file
-        run: |
-          curl -L -o myfile.zip "http://www.toomates.net/biblioteca/CompendiumJBMO.pdf"
+      - name: Download PDF
+        run: curl -L -o CompendiumJBMO.pdf "http://www.toomates.net/biblioteca/CompendiumJBMO.pdf"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: downloaded-file
-          path: myfile.zip
+          tag_name: v1.0.${{ github.run_number }}
+          release_name: "PDF Download ${{ github.run_number }}"
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./CompendiumJBMO.pdf
+          asset_name: CompendiumJBMO.pdf
+          asset_content_type: application/pdf
