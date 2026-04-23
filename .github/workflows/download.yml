@@ -1,4 +1,4 @@
-name: Save PDF as Base64 Text
+name: Convert PDF to Base64 and Print
 
 on:
   workflow_dispatch:
@@ -6,19 +6,13 @@ on:
 jobs:
   convert:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - name: Download PDF (JBMO 2020 Shortlist)
+      - name: Download PDF (JBMO 2020)
         run: curl -L -o jbmo2020.pdf "https://pregatirematematicaolimpiadejuniori.wordpress.com/wp-content/uploads/2021/07/jbmo_shortlist_2020.pdf"
 
-      - name: Convert to Base64 text
-        run: base64 jbmo2020.pdf > jbmo2020_base64.txt
-
-      - name: Commit text file to repo
+      - name: Convert to Base64 and print
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add jbmo2020_base64.txt
-          git commit -m "Add base64 text of JBMO 2020 shortlist"
-          git push
+          base64 jbmo2020.pdf > base64.txt
+          echo "===== START OF BASE64 ====="
+          cat base64.txt
+          echo "===== END OF BASE64 ====="
