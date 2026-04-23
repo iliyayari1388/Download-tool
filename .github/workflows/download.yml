@@ -12,12 +12,15 @@ jobs:
       - name: Download PDF
         run: curl -L -o CompendiumJBMO.pdf "http://www.toomates.net/biblioteca/CompendiumJBMO.pdf"
 
+      - name: Zip the PDF
+        run: zip CompendiumJBMO.zip CompendiumJBMO.pdf
+
       - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
           name: "PDF Download ${{ github.run_number }}"
-          files: CompendiumJBMO.pdf
+          files: CompendiumJBMO.zip
           draft: false
           prerelease: false
         env:
