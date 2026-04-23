@@ -6,27 +6,19 @@ on:
 jobs:
   download-and-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Download PDF
         run: curl -L -o CompendiumJBMO.pdf "http://www.toomates.net/biblioteca/CompendiumJBMO.pdf"
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
-          release_name: "PDF Download ${{ github.run_number }}"
+          name: "PDF Download ${{ github.run_number }}"
+          files: CompendiumJBMO.pdf
           draft: false
           prerelease: false
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./CompendiumJBMO.pdf
-          asset_name: CompendiumJBMO.pdf
-          asset_content_type: application/pdf
