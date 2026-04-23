@@ -1,0 +1,18 @@
+name: Download Restricted File
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download file
+        run: |
+          curl -L -o myfile.zip "http://www.toomates.net/biblioteca/CompendiumJBMO.pdf"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: downloaded-file
+          path: myfile.zip
