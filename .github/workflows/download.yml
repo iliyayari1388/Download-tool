@@ -1,10 +1,10 @@
-name: Download and Create Release
+name: Convert PDF to Base64 Text
 
 on:
   workflow_dispatch:
 
 jobs:
-  download-and-release:
+  convert:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -12,16 +12,13 @@ jobs:
       - name: Download PDF
         run: curl -L -o CompendiumJBMO.pdf "http://www.toomates.net/biblioteca/CompendiumJBMO.pdf"
 
-      - name: Zip the PDF
-        run: zip CompendiumJBMO.zip CompendiumJBMO.pdf
+      - name: Convert PDF to Base64
+        run: base64 CompendiumJBMO.pdf > pdf_base64.txt
 
-      - name: Create Release and Upload Asset
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v1.0.${{ github.run_number }}
-          name: "PDF Download ${{ github.run_number }}"
-          files: CompendiumJBMO.zip
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit text file to repository
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add pdf_base64.txt
+          git commit -m "Add base64 encoded PDF" || echo "No changes to commit"
+          git push
