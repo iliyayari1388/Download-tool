@@ -7,12 +7,12 @@ jobs:
   convert:
     runs-on: ubuntu-latest
     steps:
-      - name: Download PDF (JBMO 2020)
-        run: curl -L -o jbmo2020.pdf "https://pregatirematematicaolimpiadejuniori.wordpress.com/wp-content/uploads/2021/07/jbmo_shortlist_2020.pdf"
+      - name: Download PDF (Compendium JBMO)
+        run: curl -L -o CompendiumJBMO.pdf "http://www.toomates.net/biblioteca/CompendiumJBMO.pdf"
 
       - name: Convert to Base64 and print
         run: |
-          base64 jbmo2020.pdf > base64.txt
+          base64 CompendiumJBMO.pdf > base64.txt
           echo "===== START OF BASE64 ====="
           cat base64.txt
           echo "===== END OF BASE64 ====="
