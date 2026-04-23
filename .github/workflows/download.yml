@@ -1,4 +1,4 @@
-name: Convert PDF to Base64 Text
+name: Save PDF as Base64 Text
 
 on:
   workflow_dispatch:
@@ -9,16 +9,16 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Download PDF
-        run: curl -L -o CompendiumJBMO.pdf "http://www.toomates.net/biblioteca/CompendiumJBMO.pdf"
+      - name: Download PDF (JBMO 2020 Shortlist)
+        run: curl -L -o jbmo2020.pdf "https://pregatirematematicaolimpiadejuniori.wordpress.com/wp-content/uploads/2021/07/jbmo_shortlist_2020.pdf"
 
-      - name: Convert PDF to Base64
-        run: base64 CompendiumJBMO.pdf > pdf_base64.txt
+      - name: Convert to Base64 text
+        run: base64 jbmo2020.pdf > jbmo2020_base64.txt
 
-      - name: Commit text file to repository
+      - name: Commit text file to repo
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add pdf_base64.txt
-          git commit -m "Add base64 encoded PDF" || echo "No changes to commit"
+          git add jbmo2020_base64.txt
+          git commit -m "Add base64 text of JBMO 2020 shortlist"
           git push
